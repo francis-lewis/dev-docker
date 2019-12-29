@@ -5,7 +5,7 @@ RUN apt-get update && apt-get install -y \
     tmux \
     curl \
     git
-WORKDIR ~
+WORKDIR /root
 RUN git clone https://github.com/glewis17/dotfiles.git \
     && cd ./dotfiles \
     && ./install.sh \
