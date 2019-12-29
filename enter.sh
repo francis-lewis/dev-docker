@@ -1,4 +1,4 @@
 #!/bin/bash
 
-container_id=$(docker ps -qf "ancestor=dev-docker")
+container_id=$(docker ps -qf "name=dev-docker")
 docker exec -it $container_id /bin/bash

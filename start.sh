@@ -2,4 +2,6 @@
 
 ./remove.sh
 docker build -t dev-docker .
-docker run -td dev-docker:latest
+docker run -td \
+  --name dev-docker \
+  dev-docker:latest
