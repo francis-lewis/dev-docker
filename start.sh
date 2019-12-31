@@ -10,4 +10,5 @@ docker build -t dev-docker \
 docker run -td \
   --name dev-docker \
   -v ~/Developer:/home/$user_name/Developer \
+  --network host \
   dev-docker:latest

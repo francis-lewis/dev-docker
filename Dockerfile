@@ -5,16 +5,24 @@ RUN apt-get update && apt-get install -y \
     vim \
     tmux \
     curl \
-    git
+    git \
+    ruby-full \
+    build-essential \
+    zlib1g-dev
 
 ARG user_name
 ARG user_id
 RUN useradd -m -u ${user_id} ${user_name}
 USER ${user_name}
-WORKDIR /home/${user_name}
+ENV HOME /home/${user_name}
+WORKDIR $HOME
 
 RUN git clone https://github.com/glewis17/dotfiles.git \
-    && cd ./dotfiles \
-    && ./install.sh \
-    && cd .. \
-    && rm -rf ./dotfiles
+  && cd $HOME/dotfiles \
+  && ./install.sh \
+  && cd .. \
+  && rm -rf ./dotfiles
+
+ENV GEM_HOME $HOME/gems
+ENV PATH $HOME/gems/bin:$PATH
+RUN gem install jekyll bundler
