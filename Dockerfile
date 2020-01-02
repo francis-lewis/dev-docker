@@ -10,6 +10,9 @@ RUN apt-get update && apt-get install -y \
     build-essential \
     zlib1g-dev
 
+RUN apt-get update && apt-get install -y \
+    mit-scheme
+
 ARG user_name
 ARG user_id
 RUN useradd -m -u ${user_id} ${user_name}
