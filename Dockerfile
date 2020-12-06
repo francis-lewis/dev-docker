@@ -20,7 +20,7 @@ USER ${user_name}
 ENV HOME /home/${user_name}
 WORKDIR $HOME
 
-RUN git clone https://github.com/glewis17/dotfiles.git \
+RUN git clone https://github.com/canitgeneralize/dotfiles.git \
   && cd $HOME/dotfiles \
   && ./install.sh \
   && cd .. \
