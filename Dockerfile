@@ -1,4 +1,4 @@
-FROM ubuntu:18.04
+FROM ubuntu:20.04
 SHELL ["/bin/bash", "-c"]
 
 RUN apt-get update && apt-get install -y \
@@ -15,9 +15,11 @@ RUN apt-get update && apt-get install -y \
 
 ARG user_name
 ARG user_id
+ARG term
 RUN useradd -m -u ${user_id} ${user_name}
 USER ${user_name}
 ENV HOME /home/${user_name}
+ENV TERM ${term}
 WORKDIR $HOME
 
 RUN git clone https://github.com/canitgeneralize/dotfiles.git \

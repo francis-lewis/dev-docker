@@ -6,6 +6,7 @@ user_name=$(whoami)
 docker build -t dev-docker \
   --build-arg user_name=$user_name \
   --build-arg user_id=$(id -u) \
+  --build-arg term=$(echo $TERM) \
   .
 docker run -td \
   --name dev-docker \
