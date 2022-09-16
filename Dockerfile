@@ -37,7 +37,7 @@ WORKDIR $HOME
 
 ENV PATH=$PATH:$HOME/.local/bin
 
-RUN git clone https://github.com/gene-lewis/dotfiles.git \
+RUN git clone https://github.com/francis-lewis/dotfiles.git \
   && cd $HOME/dotfiles \
   && ./install.sh \
   && cd .. \
