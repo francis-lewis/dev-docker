@@ -1,14 +1,27 @@
-FROM ubuntu:20.04
+FROM pytorch/pytorch:1.12.1-cuda11.3-cudnn8-runtime
 SHELL ["/bin/bash", "-c"]
 
 RUN apt-get update && apt-get install -y \
-    vim \
-    tmux \
+    apt-utils \
+    build-essential
+
+RUN apt-get update && apt-get install -y \
     curl \
     git \
     ruby-full \
-    build-essential \
+    tmux \
+    vim \
+    wget \
     zlib1g-dev
+
+RUN apt-get update && apt-get install -y \
+    libosmesa6-dev \
+    libgl1-mesa-glx \
+    libglew-dev \
+    libglfw3 \
+    mesa-utils
+# Necessary for mujoco
+ENV LD_PRELOAD=$LD_PRELOAD:/usr/lib/x86_64-linux-gnu/libGLEW.so
 
 RUN apt-get update && apt-get install -y \
     mit-scheme
@@ -22,17 +35,32 @@ ENV HOME /home/${user_name}
 ENV TERM ${term}
 WORKDIR $HOME
 
-RUN git clone https://github.com/canitgeneralize/dotfiles.git \
+ENV PATH=$PATH:$HOME/.local/bin
+
+RUN git clone https://github.com/gene-lewis/dotfiles.git \
   && cd $HOME/dotfiles \
   && ./install.sh \
   && cd .. \
   && rm -rf ./dotfiles
 
+RUN echo "PS1='🐳  \[\033[1;36m\]\w\[\033[0;35m\] \[\033[1;36m\]$ \[\033[0m\]'" >> /home/${user_name}/.bashrc
+
+# Install mujoco
+RUN mkdir $HOME/.mujoco \
+  && cd $HOME/.mujoco \
+  && wget https://mujoco.org/download/mujoco210-linux-x86_64.tar.gz \
+  && tar -zxvf mujoco210-linux-x86_64.tar.gz \
+  && rm mujoco210-linux-x86_64.tar.gz \
+  && cd $HOME
+ENV LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$HOME/.mujoco/mujoco210/bin
+RUN pip install mujoco_py
+RUN python -m mujoco_py || true
+
+RUN pip install jupyter
+
 ENV GEM_HOME $HOME/gems
 ENV PATH $HOME/gems/bin:$PATH
 RUN gem install jekyll bundler
 
-RUN curl -O https://repo.anaconda.com/archive/Anaconda3-2019.10-Linux-x86_64.sh \
-  && bash Anaconda3-2019.10-Linux-x86_64.sh -b \
-  && ./anaconda3/bin/conda init \
-  && rm Anaconda3-2019.10-Linux-x86_64.sh
+ENV NVIDIA_VISIBLE_DEVICES all
+ENV NVIDIA_DRIVER_CAPABILITIES compute,utility,graphics
