@@ -58,9 +58,9 @@ RUN python -m mujoco_py || true
 
 RUN pip install jupyter
 
-ENV GEM_HOME $HOME/gems
-ENV PATH $HOME/gems/bin:$PATH
-RUN gem install jekyll bundler
+#ENV GEM_HOME $HOME/gems
+#ENV PATH $HOME/gems/bin:$PATH
+#RUN gem install jekyll bundler
 
 ENV NVIDIA_VISIBLE_DEVICES all
 ENV NVIDIA_DRIVER_CAPABILITIES compute,utility,graphics
