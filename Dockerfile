@@ -3,12 +3,15 @@ SHELL ["/bin/bash", "-c"]
 
 RUN apt-get update && apt-get install -y \
     apt-utils \
-    build-essential
+    build-essential\
+    lsb-release
 
 RUN apt-get update && apt-get install -y \
+    ca-certificates \
     curl \
     git \
-    ruby-full \
+    gnupg \
+    iproute2 \
     tmux \
     vim \
     wget \
@@ -23,6 +26,19 @@ RUN apt-get update && apt-get install -y \
 # Necessary for mujoco
 ENV LD_PRELOAD=$LD_PRELOAD:/usr/lib/x86_64-linux-gnu/libGLEW.so
 
+# Install docker
+RUN mkdir -p /etc/apt/keyrings
+RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+RUN echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null
+RUN apt-get update && apt-get install -y \
+    containerd.io \
+    docker-ce \
+    docker-ce-cli \
+    docker-compose-plugin
+ARG docker_gid
+RUN groupdel docker && \
+    groupadd -g ${docker_gid} docker
+
 RUN apt-get update && apt-get install -y \
     mit-scheme
 
@@ -30,6 +46,9 @@ ARG user_name
 ARG user_id
 ARG term
 RUN useradd -m -u ${user_id} ${user_name}
+
+RUN usermod -aG docker ${user_name}
+
 USER ${user_name}
 ENV HOME /home/${user_name}
 ENV TERM ${term}
@@ -57,6 +76,9 @@ RUN pip install mujoco_py
 RUN python -m mujoco_py || true
 
 RUN pip install jupyter
+
+# Install determined
+RUN pip install determined
 
 #ENV GEM_HOME $HOME/gems
 #ENV PATH $HOME/gems/bin:$PATH
