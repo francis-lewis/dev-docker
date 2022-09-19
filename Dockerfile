@@ -9,6 +9,7 @@ RUN apt-get update && apt-get install -y \
 RUN apt-get update && apt-get install -y \
     ca-certificates \
     curl \
+    gdb \
     git \
     gnupg \
     iproute2 \
@@ -18,10 +19,11 @@ RUN apt-get update && apt-get install -y \
     zlib1g-dev
 
 RUN apt-get update && apt-get install -y \
-    libosmesa6-dev \
     libgl1-mesa-glx \
     libglew-dev \
     libglfw3 \
+    libosmesa6-dev \
+    libsdl2-dev \
     mesa-utils
 # Necessary for mujoco
 ENV LD_PRELOAD=$LD_PRELOAD:/usr/lib/x86_64-linux-gnu/libGLEW.so
@@ -76,6 +78,7 @@ RUN pip install mujoco_py
 RUN python -m mujoco_py || true
 
 RUN pip install jupyter
+RUN pip install gym[all,accept-rom-license]
 
 # Install determined
 RUN pip install determined
