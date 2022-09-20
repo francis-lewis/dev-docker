@@ -58,6 +58,7 @@ WORKDIR $HOME
 
 ENV PATH=$PATH:$HOME/.local/bin
 
+ENV GIT_PROMPT_THEME=Single_line_Dark
 RUN git clone https://github.com/francis-lewis/dotfiles.git \
   && cd $HOME/dotfiles \
   && ./install.sh \
