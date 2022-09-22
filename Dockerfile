@@ -78,8 +78,10 @@ ENV LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$HOME/.mujoco/mujoco210/bin
 RUN pip install mujoco_py
 RUN python -m mujoco_py || true
 
-RUN pip install jupyter
-RUN pip install gym[all,accept-rom-license]
+RUN pip install gym[all,accept-rom-license] \
+                jupyter \
+                scipy \
+                vit-pytorch
 
 # Install determined
 RUN pip install determined
