@@ -18,6 +18,7 @@ docker run -td \
   -v /tmp/.X11-unix:/tmp/.X11-unix \
   -v /var/run/docker.sock:/var/run/docker.sock \
   -e DISPLAY=$(echo $DISPLAY) \
+  -e TORCH_HOME=~/Developer/experiments/torch_home \
   --network host \
   --gpus all \
   dev-docker:latest

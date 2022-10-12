@@ -81,7 +81,7 @@ RUN python -m mujoco_py || true
 RUN pip install gym[all,accept-rom-license] \
                 jupyter \
                 scipy \
-                vit-pytorch
+                tensorboard
 
 # Install determined
 RUN pip install determined
